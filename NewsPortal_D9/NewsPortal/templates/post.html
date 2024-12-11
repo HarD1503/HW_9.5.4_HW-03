@@ -1,0 +1,33 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+    {% if post.post_type == 'NEW' %}
+        <h2>Новость: {{ post.id }}</h2>
+    {% else %}
+        <h2>Статья: {{ post.id }}</h2>
+    {% endif %}
+
+    <h5>{{ post.post_title|censor }}</h5>
+    <h6>Дата публикации: {{ post.post_time|date:'d.m.Y G:i' }}</h6>
+    {{ post.post_text|censor }}
+
+    {% if request.user == post.post_author.author_user %}
+        {% if post.post_type == 'NEW' %}
+            <p>
+                <a href="/news/{{ post.pk }}/update/">Редактировать</a>
+                |
+                <a href="/news/{{ post.pk }}/delete/">Удалить</a>
+            </p>
+
+        {% else %}
+            <p>
+                <a href="/articles/{{ post.pk }}/update/">Редактировать</a>
+                |
+                <a href="/articles/{{ post.pk }}/delete/">Удалить</a>
+            </p>
+        {% endif %}
+    {% endif %}
+{% endblock content %}
